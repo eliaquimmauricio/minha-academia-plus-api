@@ -1,0 +1,14 @@
+﻿global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.IdentityModel.Tokens;
+global using Microsoft.OpenApi.Models;
+global using System.IdentityModel.Tokens.Jwt;
+global using System.Security.Claims;
+global using System.Text;
+global using System.Globalization;
+global using Microsoft.AspNetCore.Diagnostics;
+global using PUC.MinhaAcademiaPlus.API;
+global using PUC.MinhaAcademiaPlus.Domain.Interfaces;
+global using PUC.MinhaAcademiaPlus.Domain.Services;
+global using PUC.MinhaAcademiaPlus.Infra.Data;
+global using Tasken.SRC.Infra.Data;
+global using PUC.MinhaAcademiaPlus.Domain.DTO;
