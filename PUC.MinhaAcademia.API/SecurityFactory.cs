@@ -41,6 +41,7 @@ namespace PUC.MinhaAcademiaPlus.API
             return services;
         }
 
+
         public static Token CreateToken(this LoginResultado result)
         {
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
