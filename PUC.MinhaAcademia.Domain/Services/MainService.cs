@@ -34,29 +34,49 @@ namespace PUC.MinhaAcademiaPlus.Domain.Services
             return resultado;
         }
 
-        public Aluno ConsultarDadosAluno()
+        public Aluno ConsultarDadosAluno(int idLogin = 0)
         {
-            if (_tipoUsuario != "Aluno")
+            if (_tipoUsuario != "Aluno" && idLogin == 0)
                 throw new SemAutorizacaoException("Essa rota esta disponível apenas para alunos.");
+
+            if (idLogin == 0)
+                idLogin = _idLogin;
 
             return new Aluno
             {
-                DadosPessoais = _mainRepository.ConsultarDadosPessoais(_idLogin),
-                DetalhesFisicos = _mainRepository.ConsultarDetalhesFisicos(_idLogin),
+                DadosPessoais = _mainRepository.ConsultarDadosPessoais(idLogin),
+                DetalhesFisicos = _mainRepository.ConsultarDetalhesFisicos(idLogin),
                 PlanosExercicios = new List<PlanoExercicios>
                 {
                     new PlanoExercicios
                     {
-                        Domingo = _mainRepository.ConsultarExercicios(_idLogin, 1),
-                        Segunda = _mainRepository.ConsultarExercicios(_idLogin, 2),
-                        Terca   = _mainRepository.ConsultarExercicios(_idLogin, 3),
-                        Quarta  = _mainRepository.ConsultarExercicios(_idLogin, 4),
-                        Quinta  = _mainRepository.ConsultarExercicios(_idLogin, 5),
-                        Sexta   = _mainRepository.ConsultarExercicios(_idLogin, 6),
-                        Sabado  = _mainRepository.ConsultarExercicios(_idLogin, 7),
+                        Domingo = _mainRepository.ConsultarExercicios(idLogin, 1),
+                        Segunda = _mainRepository.ConsultarExercicios(idLogin, 2),
+                        Terca   = _mainRepository.ConsultarExercicios(idLogin, 3),
+                        Quarta  = _mainRepository.ConsultarExercicios(idLogin, 4),
+                        Quinta  = _mainRepository.ConsultarExercicios(idLogin, 5),
+                        Sexta   = _mainRepository.ConsultarExercicios(idLogin, 6),
+                        Sabado  = _mainRepository.ConsultarExercicios(idLogin, 7),
                     }
                 }
             };
+        }
+
+        public Instrutor ConsultarDadosAlunosPorInstrutor()
+        {
+            if (_tipoUsuario != "Instrutor")
+                throw new SemAutorizacaoException("Essa rota esta disponível apenas para instrutores.");
+
+            List<int> idsTodosAlunosPorInstrutor = _mainRepository.ConsultarIdsTodosOsAlunosPorInstrutor(_idLogin);
+
+            Instrutor resultado = new Instrutor();
+
+            foreach (var id in idsTodosAlunosPorInstrutor)
+                resultado.Alunos.Add(ConsultarDadosAluno(id));
+
+            resultado.DadosPessoais = _mainRepository.ConsultarDadosPessoais(_idLogin);
+
+            return resultado;
         }
     }
 }

@@ -32,6 +32,13 @@ namespace PUC.MinhaAcademiaPlus.Infra.Data
             return Query<Exercicio>(sql, new { idLogin, diaDaSemana });
         }
 
+        public List<int> ConsultarIdsTodosOsAlunosPorInstrutor(int idLogin)
+        {
+            const string sql = @"SELECT IdUsuarioAluno FROM AlunosInstrutores(NOLOCK) WHERE IdUsuarioInstrutor = @idLogin";
+
+            return Query<int>(sql, new { idLogin });
+        }
+
         public LoginResultado ConsultarLogin(string? usuario)
         {
             const string sql = @"SELECT Id, Usuario, Senha, TipoUsuario FROM Usuarios(NOLOCK) WHERE Usuario = @usuario";

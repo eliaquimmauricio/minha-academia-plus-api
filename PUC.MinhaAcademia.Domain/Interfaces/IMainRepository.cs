@@ -9,5 +9,6 @@ namespace PUC.MinhaAcademiaPlus.Domain.Interfaces
         Pessoa ConsultarDadosPessoais(int idLogin);
         List<DetalheFisico>? ConsultarDetalhesFisicos(int idLogin);
         List<Exercicio> ConsultarExercicios(int idLogin, int diaDaSemana);
+        List<int> ConsultarIdsTodosOsAlunosPorInstrutor(int idLogin);
     }
 }

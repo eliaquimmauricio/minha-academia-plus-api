@@ -78,3 +78,13 @@ CREATE TABLE AlunosInstrutores
 	CONSTRAINT FK_AlunosInstrutores_Usuarios_IdUsuarioInstrutor FOREIGN KEY (IdUsuarioInstrutor) REFERENCES Usuarios (Id),
 	CONSTRAINT FK_AlunosInstrutores_Usuarios_IdUsuarioAluno FOREIGN KEY (IdUsuarioAluno) REFERENCES Usuarios (Id) ON DELETE CASCADE
 )
+
+INSERT INTO AlunosInstrutores VALUES (2, 1)
+INSERT INTO AlunosInstrutores VALUES (2, 3)
+INSERT INTO AlunosInstrutores VALUES (2, 4)
+INSERT INTO AlunosInstrutores VALUES (2, 5)
+INSERT INTO AlunosInstrutores VALUES (2, 6)
+INSERT INTO AlunosInstrutores VALUES (2, 7)
+INSERT INTO AlunosInstrutores VALUES (2, 8)
+INSERT INTO AlunosInstrutores VALUES (2, 9)
+INSERT INTO AlunosInstrutores VALUES (2, 10)

@@ -8,6 +8,7 @@ namespace PUC.MinhaAcademiaPlus.API
         {
             app.MapPost("/login", (MainService service, Login login) => service.Logar(login).CreateToken()).AllowAnonymous();
             app.MapGet("/aluno", (MainService service) => service.ConsultarDadosAluno()).RequireAuthorization();
+            app.MapGet("/instrutor", (MainService service) => service.ConsultarDadosAlunosPorInstrutor()).RequireAuthorization();
             return app;
         }
     }
