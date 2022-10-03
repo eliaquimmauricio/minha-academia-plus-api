@@ -24,9 +24,9 @@ namespace Tasken.SRC.Infra.Data
             return _context.GetConnection().QueryFirstOrDefault<T>(sql, param, commandTimeout: _commandTimeOut, transaction: _sqlTransaction);
         }
 
-        protected List<T>? Query<T>(string sql, object? param = null)
+        protected List<T> Query<T>(string sql, object? param = null)
         {
-            return _context.GetConnection().Query<T>(sql, param, commandTimeout: _commandTimeOut, transaction: _sqlTransaction)?.ToList();
+            return _context.GetConnection().Query<T>(sql, param, commandTimeout: _commandTimeOut, transaction: _sqlTransaction)?.ToList() ?? new List<T>();
         }
 
         protected List<dynamic>? Query(string sql, object? param = null)

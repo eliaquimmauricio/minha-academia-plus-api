@@ -25,7 +25,7 @@ namespace PUC.MinhaAcademiaPlus.Infra.Data
             return Query<DetalheFisico>(sql, new { idLogin });
         }
 
-        public List<Exercicio>? ConsultarExercicios(int idLogin, int diaDaSemana)
+        public List<Exercicio> ConsultarExercicios(int idLogin, int diaDaSemana)
         {
             const string sql = @"SELECT DiaDaSemana, Ordem, NomeExercicio, QuantidadeDeSeries, QuantidadeDeRepeticoes, Carga, ObservacaoAluno, ObservacaoInstrutor FROM Exercicios(NOLOCK) WHERE IdUsuarios = @idLogin AND DiaDaSemana = @diaDaSemana ORDER BY Ordem ASC";
 
