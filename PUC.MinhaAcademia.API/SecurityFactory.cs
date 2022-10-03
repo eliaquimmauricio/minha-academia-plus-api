@@ -27,6 +27,18 @@ namespace PUC.MinhaAcademiaPlus.API
                 };
             });
 
+            // Configuring CORS module
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin();
+                        builder.AllowAnyHeader();
+                        builder.AllowAnyMethod();
+                    });
+            });
+
             return services;
         }
 

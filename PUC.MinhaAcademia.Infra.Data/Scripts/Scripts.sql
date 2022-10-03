@@ -69,3 +69,12 @@ INSERT INTO Exercicios (IdUsuarios, DiaDaSemana, Ordem, NomeExercicio, Quantidad
 INSERT INTO Exercicios (IdUsuarios, DiaDaSemana, Ordem, NomeExercicio, QuantidadeDeSeries, QuantidadeDeRepeticoes) VALUES (1, 6, 1, 'Rosca Biceps', 3, 10)
 INSERT INTO Exercicios (IdUsuarios, DiaDaSemana, Ordem, NomeExercicio, QuantidadeDeSeries, QuantidadeDeRepeticoes) VALUES (1, 6, 2, 'Rosca Biceps', 3, 10)
 INSERT INTO Exercicios (IdUsuarios, DiaDaSemana, Ordem, NomeExercicio, QuantidadeDeSeries, QuantidadeDeRepeticoes) VALUES (1, 6, 3, 'Rosca Biceps', 3, 10)
+
+CREATE TABLE AlunosInstrutores
+(
+	IdUsuarioInstrutor INT NOT NULL, 
+	IdUsuarioAluno INT NOT NULL, 
+	CONSTRAINT PK_AlunosInstrutores PRIMARY KEY (IdUsuarioInstrutor, IdUsuarioAluno),
+	CONSTRAINT FK_AlunosInstrutores_Usuarios_IdUsuarioInstrutor FOREIGN KEY (IdUsuarioInstrutor) REFERENCES Usuarios (Id),
+	CONSTRAINT FK_AlunosInstrutores_Usuarios_IdUsuarioAluno FOREIGN KEY (IdUsuarioAluno) REFERENCES Usuarios (Id) ON DELETE CASCADE
+)
