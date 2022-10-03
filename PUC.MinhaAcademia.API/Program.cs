@@ -14,8 +14,10 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseCors("CorsPolicy");
 app.MapUserEndpoints();
 app.UseExceptionHandler();
+
 
 CultureInfo cultureInfo = new CultureInfo("pt-BR");
 cultureInfo.NumberFormat.CurrencySymbol = "$";

@@ -27,10 +27,9 @@ namespace PUC.MinhaAcademiaPlus.API
                 };
             });
 
-            // Configuring CORS module
             services.AddCors(options =>
             {
-                options.AddDefaultPolicy(
+                options.AddPolicy("CorsPolicy",
                     builder =>
                     {
                         builder.AllowAnyOrigin();
