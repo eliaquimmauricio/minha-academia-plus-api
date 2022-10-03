@@ -1,58 +1,71 @@
-﻿CREATE TABLE dbo.CAD_KEEP_ALIVE
+﻿CREATE TABLE Usuarios
 (
-	ID_LOGIN INT NOT NULL PRIMARY KEY,
-	DATA_LOGIN DATETIME NOT NULL,
-	DATA_LAST_ALIVE DATETIME NOT NULL,
-
+	Id INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+	Usuario VARCHAR(100) UNIQUE,
+	Senha VARCHAR(100) NOT NULL,
+    TipoUsuario VARCHAR(100) NOT NULL
 )
 
-GO
+INSERT INTO Usuarios (Usuario, Senha, TipoUsuario) VALUES ('User-Aluno', '123456', 'Aluno')
+INSERT INTO Usuarios (Usuario, Senha, TipoUsuario) VALUES ('User-Instrutor', '123456', 'Instrutor')
 
-CREATE NONCLUSTERED INDEX IX_CAD_KEEP_ALIVE_DATA_LAST_ALIVE ON dbo.CAD_KEEP_ALIVE (DATA_LAST_ALIVE)
+CREATE TABLE DadosPessoais
+(
+	IdUsuarios INT NOT NULL PRIMARY KEY,
+	NomeCompleto VARCHAR(255) NOT NULL,
+	Apelido VARCHAR(255),
+	DataNascimento DATETIME NOT NULL,
+	CONSTRAINT FK_IdUsuarios FOREIGN KEY (IdUsuarios) REFERENCES Usuarios (Id) ON DELETE CASCADE
+)
 
-GO
+INSERT INTO DadosPessoais VALUES (1, 'Eliaquim Dos Santos Mauricio', 'Eliaquim', '1994-02-25')
+INSERT INTO DadosPessoais VALUES (2, 'Eliaquim Dos Santos Mauricio', 'Eliaquim', '1994-02-25')
 
-ALTER TABLE dbo.CAD_KEEP_ALIVE ADD LOGIN_COM_DISCADOR BIT NOT NULL
+CREATE TABLE DetalhesFisicos
+(
+	Id INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+	IdUsuarios INT NOT NULL,
+	Peso FLOAT,
+	PercentualGordura FLOAT,
+	Observacao VARCHAR(255),
+	DataHoraCadastro DATETIME NOT NULL DEFAULT GETDATE(),
+	CONSTRAINT FK_DetalhesFisicos_IdUsuarios FOREIGN KEY (IdUsuarios) REFERENCES Usuarios (Id) ON DELETE CASCADE
+)
 
-GO
 
-ALTER TABLE dbo.CAD_KEEP_ALIVE ADD CENTRO_CUSTO INT
+INSERT INTO DetalhesFisicos (IdUsuarios, Peso, PercentualGordura, Observacao) VALUES (1, 85.5, 5.0, 'Blábláblá')
+INSERT INTO DetalhesFisicos (IdUsuarios, Peso, PercentualGordura, Observacao) VALUES (1, 90.5, 5.0, 'Blábláblá')
+INSERT INTO DetalhesFisicos (IdUsuarios, Peso, PercentualGordura, Observacao) VALUES (1, 90.5, 5.0, 'Blábláblá')
 
-GO
+INSERT INTO DetalhesFisicos (IdUsuarios, Peso, PercentualGordura, Observacao) VALUES (2, 85.5, 5.0, 'Blábláblá')
+INSERT INTO DetalhesFisicos (IdUsuarios, Peso, PercentualGordura, Observacao) VALUES (2, 90.5, 5.0, 'Blábláblá')
+INSERT INTO DetalhesFisicos (IdUsuarios, Peso, PercentualGordura, Observacao) VALUES (2, 90.5, 5.0, 'Blábláblá')
 
-CREATE TABLE [dbo].[CAD_LICENCA_NOVO](
-	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[COD_TIPOLICENCA] [int] NULL,
-	[QUANTIDADE_LOGINS] [int] NULL,
-	[VALIDADE] [datetime] NULL,
-	[ATIVA] [bit] NULL,
-	[COD_RECUP_ADDED] [int] NULL,
-	[HASH_LICENCA] [varchar](max) NULL,
-	[DATA_INSERCAO] [datetime] NULL
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-ALTER TABLE [dbo].[CAD_LICENCA_NOVO]  WITH CHECK ADD FOREIGN KEY([COD_TIPOLICENCA]) REFERENCES [dbo].[CAD_TIPOLICENCA] ([ID])
+CREATE TABLE Exercicios
+(
+	Id INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+	IdUsuarios INT NOT NULL,
+	DiaDaSemana TINYINT NOT NULL,
+	Ordem TINYINT NOT NULL,
+	NomeExercicio VARCHAR(255) NOT NULL,
+	QuantidadeDeSeries INT NOT NULL,
+	QuantidadeDeRepeticoes INT NOT NULL,
+	Carga FLOAT,
+	ObservacaoAluno VARCHAR(255),
+	ObservacaoInstrutor VARCHAR(255),
+	CONSTRAINT FK_Exercicios_IdUsuarios FOREIGN KEY (IdUsuarios) REFERENCES Usuarios (Id) ON DELETE CASCADE
+)
 
-GO
-
-CREATE TRIGGER dbo.TRG_LOGOUT_API_LICENCAS ON dbo.CAD_KEEP_ALIVE AFTER DELETE
-AS
-BEGIN
-	INSERT INTO dbo.CAD_LOGOUT_CONTROLADOR (IDLOGIN, DATA_LOGOUT, TIPO_LOGOUT) SELECT DELETED.ID_LOGIN, GETDATE(), CAST(SESSION_CONTEXT(N'TIPO_LOGOUT') AS INT) FROM DELETED
-END
-
-GO
-
-ALTER TABLE CAD_KEEP_ALIVE ENABLE TRIGGER TRG_LOGOUT_API_LICENCAS
-
-GO
-
-ALTER TABLE CAD_LOGOUT_CONTROLADOR ADD TIPO_LOGOUT TINYINT
-
-GO
-
-ALTER TABLE CAD_LOGOUT_CONTROLADOR ALTER COLUMN IDLOGIN INT NOT NULL
-
-GO
-
-ALTER TABLE CAD_LOGOUT_CONTROLADOR ADD PRIMARY KEY (IDLOGIN)
+INSERT INTO Exercicios (IdUsuarios, DiaDaSemana, Ordem, NomeExercicio, QuantidadeDeSeries, QuantidadeDeRepeticoes) VALUES (1, 2, 1, 'Rosca Biceps', 3, 10)
+INSERT INTO Exercicios (IdUsuarios, DiaDaSemana, Ordem, NomeExercicio, QuantidadeDeSeries, QuantidadeDeRepeticoes) VALUES (1, 2, 2, 'Rosca Biceps', 3, 10)
+INSERT INTO Exercicios (IdUsuarios, DiaDaSemana, Ordem, NomeExercicio, QuantidadeDeSeries, QuantidadeDeRepeticoes) VALUES (1, 2, 3, 'Rosca Biceps', 3, 10)
+INSERT INTO Exercicios (IdUsuarios, DiaDaSemana, Ordem, NomeExercicio, QuantidadeDeSeries, QuantidadeDeRepeticoes) VALUES (1, 2, 4, 'Rosca Biceps', 3, 10)
+INSERT INTO Exercicios (IdUsuarios, DiaDaSemana, Ordem, NomeExercicio, QuantidadeDeSeries, QuantidadeDeRepeticoes) VALUES (1, 2, 5, 'Rosca Biceps', 3, 10)
+INSERT INTO Exercicios (IdUsuarios, DiaDaSemana, Ordem, NomeExercicio, QuantidadeDeSeries, QuantidadeDeRepeticoes) VALUES (1, 4, 1, 'Rosca Biceps', 3, 10)
+INSERT INTO Exercicios (IdUsuarios, DiaDaSemana, Ordem, NomeExercicio, QuantidadeDeSeries, QuantidadeDeRepeticoes) VALUES (1, 4, 2, 'Rosca Biceps', 3, 10)
+INSERT INTO Exercicios (IdUsuarios, DiaDaSemana, Ordem, NomeExercicio, QuantidadeDeSeries, QuantidadeDeRepeticoes) VALUES (1, 4, 3, 'Rosca Biceps', 3, 10)
+INSERT INTO Exercicios (IdUsuarios, DiaDaSemana, Ordem, NomeExercicio, QuantidadeDeSeries, QuantidadeDeRepeticoes) VALUES (1, 4, 4, 'Rosca Biceps', 3, 10)
+INSERT INTO Exercicios (IdUsuarios, DiaDaSemana, Ordem, NomeExercicio, QuantidadeDeSeries, QuantidadeDeRepeticoes) VALUES (1, 6, 1, 'Rosca Biceps', 3, 10)
+INSERT INTO Exercicios (IdUsuarios, DiaDaSemana, Ordem, NomeExercicio, QuantidadeDeSeries, QuantidadeDeRepeticoes) VALUES (1, 6, 2, 'Rosca Biceps', 3, 10)
+INSERT INTO Exercicios (IdUsuarios, DiaDaSemana, Ordem, NomeExercicio, QuantidadeDeSeries, QuantidadeDeRepeticoes) VALUES (1, 6, 3, 'Rosca Biceps', 3, 10)

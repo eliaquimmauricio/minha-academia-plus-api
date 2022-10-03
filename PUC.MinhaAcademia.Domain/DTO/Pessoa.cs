@@ -11,6 +11,6 @@ namespace PUC.MinhaAcademia.Domain.DTO
         public string? NomeCompleto { get; set; }
         public string? Apelido { get; set; }
         public DateTime DataNascimento { get; set; }
-        public int Idade => ((int)(DateTime.Now - DataNascimento).TotalDays) * 365;
+        public int Idade => ((int)(DateTime.Now - DataNascimento).TotalDays) / 365;
     }
 }

@@ -1,4 +1,5 @@
-﻿using PUC.MinhaAcademiaPlus.Domain.DTO;
+﻿using PUC.MinhaAcademia.Domain.DTO;
+using PUC.MinhaAcademiaPlus.Domain.DTO;
 
 namespace PUC.MinhaAcademiaPlus.API
 {
@@ -29,23 +30,28 @@ namespace PUC.MinhaAcademiaPlus.API
             return services;
         }
 
-        public static string CreateToken(this LoginResultado result)
+        public static Token CreateToken(this LoginResultado result)
         {
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim("id-login", result.Id ?? string.Empty),
+                    new Claim("id-login", result.Id.ToString()),
                     new Claim("tipo-usuario", result.TipoUsuario ?? string.Empty)
                 }),
-                Expires = DateTime.UtcNow.AddDays(1),
+                Expires = DateTime.UtcNow.AddMonths(12),
                 SigningCredentials = new SigningCredentials(_symmetricSecurityKey, SecurityAlgorithms.HmacSha512Signature)
             };
 
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return tokenHandler.WriteToken(token);
+            return new Token
+            {
+                TokenAcesso = tokenHandler.WriteToken(token),
+                DataHoraExpiracao = tokenDescriptor.Expires.Value.ToLocalTime(),
+                TipoUsuario = result.TipoUsuario
+            };
         }
     }
 }

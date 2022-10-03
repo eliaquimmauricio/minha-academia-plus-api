@@ -15,6 +15,5 @@ namespace PUC.MinhaAcademia.Domain.DTO
         public List<Exercicio>? Quinta { get; set; }
         public List<Exercicio>? Sexta { get; set; }
         public List<Exercicio>? Sabado { get; set; }
-        public DateTime DataUltimaAtualizacao { get; set; }
     }
 }

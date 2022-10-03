@@ -1,6 +1,6 @@
 ﻿namespace PUC.MinhaAcademia.Domain.DTO
 {
-    public class Corpo
+    public class DetalheFisico
     {
         
         public double Peso { get; set; }

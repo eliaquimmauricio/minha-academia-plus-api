@@ -12,7 +12,7 @@ namespace PUC.MinhaAcademiaPlus.Domain.Services
         private readonly IMainRepository _mainRepository;
         private readonly IHttpContextAccessor? _httpContextAcessor;
 
-        private readonly string _idLogin = string.Empty;
+        private readonly int _idLogin = -1;
         private readonly string _tipoUsuario = string.Empty;
 
         public MainService(IMainRepository mainRepository, IHttpContextAccessor httpContextAcessor)
@@ -20,17 +20,18 @@ namespace PUC.MinhaAcademiaPlus.Domain.Services
             _mainRepository = mainRepository;
             _httpContextAcessor = httpContextAcessor;
 
-            _idLogin = _httpContextAcessor?.GetClaim<string>("id-login") ?? string.Empty;
+            _idLogin = _httpContextAcessor?.GetClaim<int>("id-login") ?? -1;
             _tipoUsuario = _httpContextAcessor?.GetClaim<string>("tipo-usuario") ?? string.Empty;
         }
 
         public LoginResultado Logar(Login login)
         {
-            return new LoginResultado
-            {
-                Id = Guid.NewGuid().ToString(),
-                TipoUsuario = "Aluno"
-            };
+            LoginResultado resultado = _mainRepository.ConsultarLogin(login.Usuario);
+
+            if (resultado == null || resultado.Senha != login.Senha)
+                throw new SemAutorizacaoException("Usuário ou senha incorretos.");
+
+            return resultado;
         }
 
         public Aluno ConsultarDadosAluno()
@@ -38,85 +39,24 @@ namespace PUC.MinhaAcademiaPlus.Domain.Services
             if (_tipoUsuario != "Aluno")
                 throw new SemAutorizacaoException("Essa rota esta disponível apenas para alunos.");
 
-            //TODO: Adicionar aqui a consulta dos dados do aluno;
-
             return new Aluno
             {
-                DadosPessoais = new Pessoa
-                {
-                    NomeCompleto = "Eliaquim Dos Santos",
-                    Apelido = "Brabo",
-                    DataNascimento = DateTime.Now
-                },
-                DetalhesFisicos = new List<Corpo>
-                {
-                    new Corpo
-                    {
-                        DataHoraCadastro = DateTime.Now,                        
-                        Observacao = "Blablabla",
-                        PercentualGordura = 1,
-                        Peso = 83.4
-                    }
-                },
+                DadosPessoais = _mainRepository.ConsultarDadosPessoais(_idLogin),
+                DetalhesFisicos = _mainRepository.ConsultarDetalhesFisicos(_idLogin),
                 PlanosExercicios = new List<PlanoExercicios>
                 {
                     new PlanoExercicios
                     {
-                        Segunda = new List<Exercicio>
-                        {
-                            new Exercicio
-                            {
-                                NomeExercicio = "Rosca Biceps",
-                                QuantidadeDeSeries = 4,
-                                QuantidadeDeRepeticoes = 10,
-                                Ordem = 1
-                            },
-                            new Exercicio
-                            {
-                                NomeExercicio = "Supino Reto",
-                                QuantidadeDeSeries = 4,
-                                QuantidadeDeRepeticoes = 10,
-                                Ordem = 1
-                            }
-                        },
-                        Quarta = new List<Exercicio>
-                        {
-                            new Exercicio
-                            {
-                                NomeExercicio = "Rosca Biceps",
-                                QuantidadeDeSeries = 4,
-                                QuantidadeDeRepeticoes = 10,
-                                Ordem = 1
-                            },
-                            new Exercicio
-                            {
-                                NomeExercicio = "Supino Reto",
-                                QuantidadeDeSeries = 4,
-                                QuantidadeDeRepeticoes = 10,
-                                Ordem = 1
-                            }
-                        },
-                        Sexta = new List<Exercicio>
-                        {
-                            new Exercicio
-                            {
-                                NomeExercicio = "Rosca Biceps",
-                                QuantidadeDeSeries = 4,
-                                QuantidadeDeRepeticoes = 10,
-                                Ordem = 1
-                            },
-                            new Exercicio
-                            {
-                                NomeExercicio = "Supino Reto",
-                                QuantidadeDeSeries = 4,
-                                QuantidadeDeRepeticoes = 10,
-                                Ordem = 1
-                            }
-                        }
+                        Domingo = _mainRepository.ConsultarExercicios(_idLogin, 1),
+                        Segunda = _mainRepository.ConsultarExercicios(_idLogin, 2),
+                        Terca   = _mainRepository.ConsultarExercicios(_idLogin, 3),
+                        Quarta  = _mainRepository.ConsultarExercicios(_idLogin, 4),
+                        Quinta  = _mainRepository.ConsultarExercicios(_idLogin, 5),
+                        Sexta   = _mainRepository.ConsultarExercicios(_idLogin, 6),
+                        Sabado  = _mainRepository.ConsultarExercicios(_idLogin, 7),
                     }
-                    }
+                }
             };
         }
-
     }
 }
